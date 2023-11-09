@@ -1,0 +1,29 @@
+@for $i from 1 through 20 {
+  .table-item:first-child:nth-child(#{$i}),
+  .table-item:first-child:nth-child(#{$i}) > th, td {
+    width: 100% / $i;
+  }
+}
+
+.w-100 {
+  width: 100%;
+}
+
+.w-50 {
+  width: 50%;
+}
+
+.d-flex {
+  display: flex;
+}
+
+// .p-1 {
+//   padding: 1rem;
+// }
+.gap-1 {
+  gap: 1rem;
+}
+
+.hidden {
+  display: none;
+}
