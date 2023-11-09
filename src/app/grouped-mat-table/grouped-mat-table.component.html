@@ -57,7 +57,7 @@
   <mat-row
     mat-ripple
     *matRowDef="let row; columns: ['groupHeader']; when: isGroup"
-    (click)="expandRow(row)"
+    (click)="toggleRow(row)"
     style="cursor: pointer; background-color: lightgray;"
     [ngClass]="row.numChildren > 0 ? '' : 'hidden'"
   ></mat-row>
