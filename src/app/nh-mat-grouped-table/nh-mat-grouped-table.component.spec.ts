@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { GroupedMatTableComponent } from './grouped-mat-table.component';
+import { GroupedMatTableComponent } from './nh-mat-grouped-table.component';
 
 describe('GroupedMatTableComponent', () => {
   let component: GroupedMatTableComponent;

@@ -1,0 +1,103 @@
+<!-- TODO make columns resizable -->
+<!-- TODO add comments -->
+<table
+  mat-table
+  matSort
+  cdkDropList
+  cdkDropListOrientation="horizontal"
+  (cdkDropListDropped)="onDragged($event)"
+  #table
+  [dataSource]="dataSource"
+  class="w-100 nh-mat-grouped-table"
+>
+  <!-- TODO add normal table element support -->
+  <!-- TODO make the empty column work -->
+  <!-- Adds an empty column so the group rows are better visible -->
+  <!-- <ng-container matColumnDef="_emptyCol">
+    <mat-header-cell *matHeaderCellDef>Empty</mat-header-cell>
+    <mat-cell *matCellDef="let element">Sehr empty</mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="_index">
+    <mat-header-cell *matHeaderCellDef>#</mat-header-cell>
+    <mat-cell *matCellDef="let element">{{ element.globalDataItemIndex + 1 }}</mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="_relativeIndex">
+    <mat-header-cell *matHeaderCellDef>##</mat-header-cell>
+    <mat-cell *matCellDef="let element">{{ element.relativeGroupItemIndex + 1 }}</mat-cell>
+  </ng-container> -->
+
+  <ng-container
+    *ngFor="let column of columnOrder; let i = index"
+    [matColumnDef]="column.columnDef"
+  >
+    <th
+      mat-header-cell
+      *matHeaderCellDef
+      mat-sort-header
+      cdkDrag
+      (cdkDragStarted)="dragging = true"
+      (cdkDragEnded)="dragging = false"
+      [disabled]="dragging"
+      class="border mat-header-cell"
+      [resizeColumn]="true"
+      [index]="i"
+      [initialWidth]="column.width ?? null"
+      (resizedColumnSize)="column.width = $event"
+    >
+      <span>{{ column.header }}</span>
+    </th>
+    <!-- TODO fix (and probably filtering) sorting with the newly added rowspan feature -->
+    <td
+      mat-cell
+      *matCellDef="let element"
+      class="border mat-cell"
+      [attr.rowspan]="element.data[column.columnDef].span ?? 1"
+      [ngClass]="setVisibilityIfEmpty(element.data[column.columnDef])"
+    >
+      {{ element.data[column.columnDef].value ?? element.data[column.columnDef] ?? "" }}
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="groupHeader">
+    <td
+      mat-cell
+      *matCellDef="let group"
+      matRipple
+      [matRippleCentered]="true"
+      [attr.colspan]="columnOrder.length"
+    >
+      <div
+        class="d-flex gap-2"
+      >
+        <i
+          class="fas"
+          [ngClass]="group.isExpanded ? 'fa-caret-down' : 'fa-caret-right'"
+          style="width: 1rem; height: 1rem;"
+        ></i>
+        <div>{{ group.name }}</div>
+      </div>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumnOrder"></tr>
+  <tr
+    mat-row
+    *matRowDef="let row; columns: displayedColumnOrder"
+    [ngClass]="
+      (row.isExpanded ? '' : 'd-none') + (!row.selected ? '' : ' bg-light')
+    "
+    (click)="onRowClicked(row.globalIndex)"
+    (dblclick)="onRowClicked(row.globalIndex, true)"
+    class="data-item-row"
+  ></tr>
+
+  <tr
+    mat-row
+    *matRowDef="let row; columns: ['groupHeader']; when: isGroup"
+    (click)="toggleRow(row)"
+    class="user-select-none group-item-row border-start border-end"
+  >
+  </tr>
+</table>

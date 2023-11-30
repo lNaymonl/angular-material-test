@@ -1,18 +1,70 @@
-@for $i from 1 through 20 {
-  .table-item:first-child:nth-child(#{$i}),
-  .table-item:first-child:nth-child(#{$i}) > th, td {
-    width: 100% / $i;
-  }
+tr div.mat-sort-header.content {
+  border-bottom: 1px solid black;
+}
+tr.data-item-row:hover {
+  background-color: lightgray;
+}
+.rowspan-col {
+  background-color: white !important;
 }
 
-.w-100 {
+tr.group-item-row {
+  background-color: rgb(235, 235, 235);
+}
+
+tr.group-item-row:hover {
+  cursor: pointer;
+  background-color: lightgray;
+}
+
+.cdk-drag-preview {
+  box-sizing: border-box;
+  border-radius: 4px;
+  box-shadow:
+    0 5px 5px -3px rgba(0, 0, 0, 0.2),
+    0 8px 10px 1px rgba(0, 0, 0, 0.14),
+    0 3px 14px 2px rgba(0, 0, 0, 0.12);
+}
+
+.cdk-drag-placeholder {
+  opacity: 0;
+}
+
+.cdk-drag-animating {
+  box-shadow: none;
+  transition:
+    transform 200ms cubic-bezier(0, 0, 0.2, 1),
+    box-shadow 200ms ease-out;
+}
+
+table.nh-mat-table.cdk-drop-list-dragging
+  th:not(.cdk-drag-placeholder) {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.mat-table,
+.nh-mat-table,
+.nh-mat-grouped-table {
+  $resizer-width: 15px;
+
   width: 100%;
-}
 
-.d-flex {
-  display: flex;
-}
+  &.resizing {
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    cursor: col-resize;
+  }
 
-.p-1 {
-  padding: 1rem;
+  .mat-header-cell {
+    cursor: pointer;
+    position: relative;
+
+    &:not(:nth-child(1)) {
+      padding-inline: calc($resizer-width / 2);
+    }
+    &:is(:first-child) {
+      padding-right: calc($resizer-width / 2);
+    }
+  }
 }
