@@ -33,11 +33,14 @@ export class ResizeColumnDirective implements OnInit {
   private pressed: boolean = false;
 
   constructor(private renderer: Renderer2, private el: ElementRef) {
-    // console.log(this.columnResizing)
     const ne = this.el.nativeElement as HTMLElement;
     if (ne.tagName.toLowerCase() != "th") throw new Error(`the resize-column directive is only available for the \"th\" element but was applied on: ${ne.tagName.toLowerCase()}`)
     this.column = this.el.nativeElement;
   }
+
+  // TODO when resizing a column too much the mouse gets disaligned with the column border
+  // TODO when 2..n column gets to small, it resizes the column before
+  // TODO column element overlaps the resizer element
 
   ngOnInit() {
     this.row = this.renderer.parentNode(this.column);
@@ -91,13 +94,17 @@ export class ResizeColumnDirective implements OnInit {
     if (this.pressed && event.buttons) {
       this.renderer.addClass(this.table, 'resizing');
 
-      const widthInPx = this.startWidth + event.pageX - this.startX;
+      // Both are doing the same
+      // const widthInPx = this.startWidth + event.pageX - this.startX;
+      const widthInPx = event.pageX - this.column.offsetLeft;
+
       this.width = widthInPx / this.row.offsetWidth * 100;
+
       this.renderer.setStyle(this.column, 'width', `${this.width}%`);
     }
   };
 
-  onMouseUp = (event: MouseEvent) => {
+  onMouseUp = (_event: MouseEvent) => {
     if (this.pressed) {
       this.pressed = false;
       this.renderer.removeClass(this.table, 'resizing');

@@ -8,7 +8,10 @@ import { map } from 'rxjs/operators';
 @Component({
   selector: 'nh-mat-grouped-table',
   templateUrl: './nh-mat-grouped-table.component.html',
-  styleUrls: ['./nh-mat-grouped-table.component.scss']
+  styleUrls: [
+    // './nh-mat-grouped-table.component.scss',
+    '../nh-mat-table/nh-mat-table.component.scss',
+  ]
 })
 export class NhMatGroupedTable {
   @ViewChild(MatSort) sort!: MatSort; // Init the sorting
@@ -37,6 +40,8 @@ export class NhMatGroupedTable {
 
   @Output() rowClicked: EventEmitter<DataItemAsIndex> = new EventEmitter();
   @Output() rowDblClicked: EventEmitter<DataItemAsIndex> = new EventEmitter();
+
+  dragEnabled: boolean = true;
 
   // Initializes both the column order and the actual data
   private _setData$ = combineLatest([
@@ -69,8 +74,6 @@ export class NhMatGroupedTable {
         // Sets the data source to the converted data and creates it when the data source is null
         this.dataSource.data = this._data;
       }
-
-      // console.log({ dataSource: this.dataSource.data });
     })
   ).subscribe();
 
@@ -348,10 +351,6 @@ export class NhMatGroupedTable {
   dragging: boolean = false;
 
   onDragged(event: CdkDragDrop<string[]>) {
-    // console.log({
-    //   event,
-    //   displayedColumnOrder: this.displayedColumnOrder
-    // })
     moveItemInArray(this.displayedColumnOrder, event.previousIndex, event.currentIndex);
   }
 
@@ -378,6 +377,18 @@ export class NhMatGroupedTable {
     }
 
     return '';
+  }
+
+  setRowspan(element: DataItem, column: Column<any>): number {
+    return element.data[column.columnDef].span ?? 1;
+  }
+
+  onResizedColumnSize(index: number, event: number) {
+    this.columnOrder[index].width = event;
+  }
+  
+  onResizeClicked(event: boolean) {
+    this.dragEnabled = !event;
   }
 }
 

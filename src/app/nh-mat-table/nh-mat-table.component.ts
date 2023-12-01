@@ -34,7 +34,6 @@ export class NhMatTableComponent {
   _dataItems: Item[] = [];
   _data: { [key: string]: any }[] = [];
   @Input() set data(value: { [key: string]: any }[] | null) {
-    console.log(value)
     if (!value) {
       this._data = [];
       this.dataSource.data = [];
@@ -103,10 +102,6 @@ export class NhMatTableComponent {
       this.dataSource.paginator.firstPage();
   }
 
-  onRowDblClick() {
-    console.log("dblclick")
-  }
-
   onRowClicked(index: number) {
     this.rowClicked.emit(index);
   }
@@ -144,17 +139,11 @@ export class NhMatTableComponent {
   }
 
   onResizedColumnSize(index: number, event: number) {
-    console.log(this.dragEnabled);
     this.columnOrder[index].width = event;
   }
   
   onResizeClicked(event: boolean) {
     this.dragEnabled = !event;
-    // if (event)
-    //   this.dragEnabled = !event;
-    // else
-      
-    console.log(this.dragEnabled);
   }
 }
 
