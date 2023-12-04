@@ -52,17 +52,11 @@ export class ResizeColumnDirective implements OnInit {
 
     if (!this.column.matches(":last-child")) {
       const resizerWidth = 15;
+      const backgroundColor: number | string = 0xd3d3d3;
 
-      this.renderer.setStyle(resizer, "position", "absolute")
-      this.renderer.setStyle(resizer, "right", `${-1 * resizerWidth / 2}px`);
-      this.renderer.setStyle(resizer, "top", "0");
+      this.renderer.setStyle(this.column, "transition", "width 15ms ease-in-out")
 
-      this.renderer.setStyle(resizer, "cursor", "col-resize");
-
-      this.renderer.setStyle(resizer, "width", `${resizerWidth}px`);
-      this.renderer.setStyle(resizer, "height", "100%");
-
-      this.renderer.setStyle(resizer, "background-color", "transparent");
+      this.setResizerStyle(resizer, resizerWidth, backgroundColor);
     }
 
     this.renderer.appendChild(this.column, resizer);
@@ -74,12 +68,20 @@ export class ResizeColumnDirective implements OnInit {
     if (this.initialColumnWidth) {
       this.renderer.setStyle(this.column, 'width', `${this.initialColumnWidth}%`);
       this.width = this.initialColumnWidth;
-    } else {
-      // const widthInPx = this.startWidth + event.pageX - this.startX;
-      const widthInPx = this.column.offsetWidth;
-      this.width = widthInPx / this.row.offsetWidth * 100;
-      this.renderer.setStyle(this.column, 'width', `${this.width}%`);
     }
+  }
+
+  setResizerStyle(resizer: HTMLElement, width: number, backgroundColor: number | string) {
+    this.renderer.setStyle(resizer, "cursor", "col-resize");
+      
+    this.renderer.setStyle(resizer, "width", `${width}px`);
+    this.renderer.setStyle(resizer, "height", "100%");
+
+    this.renderer.setStyle(resizer, "position", "absolute")
+    this.renderer.setStyle(resizer, "right", `${-1 * width / 2}px`);
+    this.renderer.setStyle(resizer, "top", "0");
+    
+    this.renderer.setStyle(resizer, "background-color", `${typeof backgroundColor == "number" ? "#" + backgroundColor.toString(16) : backgroundColor}`);
   }
 
   onMouseDown = (event: MouseEvent) => {
@@ -95,8 +97,8 @@ export class ResizeColumnDirective implements OnInit {
       this.renderer.addClass(this.table, 'resizing');
 
       // Both are doing the same
-      // const widthInPx = this.startWidth + event.pageX - this.startX;
-      const widthInPx = event.pageX - this.column.offsetLeft;
+      const widthInPx = this.startWidth + (event.pageX - this.startX);
+      // const widthInPx = event.pageX - this.column.offsetLeft;
 
       this.width = widthInPx / this.row.offsetWidth * 100;
 

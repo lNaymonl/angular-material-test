@@ -4,6 +4,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { BehaviorSubject, combineLatest } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { Settings } from '../home/home.component';
 
 @Component({
   selector: 'nh-mat-grouped-table',
@@ -24,10 +25,13 @@ export class NhMatGroupedTable {
     this._columnOrder = value;
 
     this._columnOrder$.next(value);
+    this.columnOrderChange.emit(value);
   }
   get columnOrder(): Column<any>[] {
     return this._columnOrder;
   }
+
+  @Output() columnOrderChange: EventEmitter<Column<any>[]> = new EventEmitter();
 
   private _data$: BehaviorSubject<Group[] | null> = new BehaviorSubject<Group[] | null>(null);
   // The input data but groups and items in a flat array. Also in a specific order

@@ -1,5 +1,9 @@
 import { Component } from '@angular/core';
-import { Column, Group } from '../nh-mat-grouped-table/nh-mat-grouped-table.component';
+import {
+  Column,
+  Group,
+} from '../nh-mat-grouped-table/nh-mat-grouped-table.component';
+import { moveItemInArray } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-home',
@@ -9,23 +13,23 @@ import { Column, Group } from '../nh-mat-grouped-table/nh-mat-grouped-table.comp
 export class HomeComponent {
   data = ELEMENT_DATA;
 
-  columnOrder: Column<PeriodicElement>[] = [
+  private _columnOrder: Column<PeriodicElement>[] = [
     {
       columnDef: 'position',
       header: 'Position',
-      // width: 40,
+      width: 40,
       cell: (element) => `${element.position}`,
     },
     {
       columnDef: 'name',
       header: 'Name',
-      // width: 20,
+      width: 20,
       cell: (element) => `${element.name}`,
     },
     {
       columnDef: 'weight',
       header: 'Weight',
-      // width: 10,
+      width: 10,
       cell: (element) => `${element.weight}`,
     },
     {
@@ -35,8 +39,78 @@ export class HomeComponent {
       cell: (element) => element.symbol ?? '',
     },
   ];
+  get columnOrder() {
+    return this._columnOrder;
+  }
+  set columnOrder(value: Column<PeriodicElement>[]) {
+    this._columnOrder = value;
+    this.writeUserSettings();
+  }
 
-  ngOnInit() {}
+  // TODO implement real saving of the user settings
+
+  ngOnInit() {
+    const readSettings = this.readUserSettings();
+
+    if (!readSettings) this.writeUserSettings();
+  }
+
+  db: string = '';
+
+  readUserSettings(): boolean {
+    let settings: Settings | null = null;
+    
+    try {
+      settings = JSON.parse(this.db);
+    } catch {
+      return false;
+    }
+
+    if (!settings) return false;
+
+    for (let i = 0; i < settings.uebersichtFachkraftschuessel.length; ++i) {
+      const colSetting: ColumnSetting = settings.uebersichtFachkraftschuessel[i];
+
+      const columnOrderIndex =
+        this.columnOrder
+        .findIndex(col => col.columnDef == colSetting.col);
+
+      if (columnOrderIndex == -1) throw new Error("Columns don't match!");
+
+      this.columnOrder[columnOrderIndex].width = colSetting.width;
+
+      moveItemInArray(this.columnOrder, columnOrderIndex, colSetting.pos);
+    }
+
+    return true;
+  }
+
+  writeUserSettings() {
+    const settings: Settings = {
+      uebersichtFachkraftschuessel: [],
+      zugeordneteMitarbeiter: [],
+    };
+
+    for (let i = 0; i < this.columnOrder.length; ++i) {
+      const col = this.columnOrder[i];
+      settings.uebersichtFachkraftschuessel[i] = {
+        col: col.columnDef,
+        width: col.width,
+        pos: i
+      };
+    }
+
+    this.db = JSON.stringify(settings)
+  }
+}
+
+type ColumnSetting = { col: string; width?: number; pos: number };
+
+export interface Settings {
+  // stichtag: Date,
+  // stichtagActive: boolean,
+  uebersichtFachkraftschuessel: ColumnSetting[];
+  zugeordneteMitarbeiter: ColumnSetting[];
 }
 
 export interface PeriodicElement {
@@ -61,23 +135,25 @@ export interface PeriodicElement {
 
 // , symbol: 'Be'
 const ELEMENT_DATA: Group[] = [
-  new Group(
-    "Group 1", [
-    {position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H'},
-    {position: 2, name: 'Helium', weight: 4.0026, symbol: 'He'},
-    {position: 3, name: 'Lithium', weight: 6.941, symbol: { value: 'Li', span: 2 }},
-    {position: 4, name: '', weight: 9.0122},
+  new Group('Group 1', [
+    { position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H' },
+    { position: 2, name: 'Helium', weight: 4.0026, symbol: 'He' },
+    {
+      position: 3,
+      name: 'Lithium',
+      weight: 6.941,
+      symbol: { value: 'Li', span: 2 },
+    },
+    { position: 4, name: '', weight: 9.0122 },
   ]),
-  new Group(
-    "Group 2", [
-    {position: 5, name: 'Boron', weight: 10.811, symbol: 'B'},
-    {position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C'},
-    {position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N'},
+  new Group('Group 2', [
+    { position: 5, name: 'Boron', weight: 10.811, symbol: 'B' },
+    { position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C' },
+    { position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N' },
   ]),
-  new Group(
-    "Group 3", [
-    {position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O'},
-    {position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F'},
-    {position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne'},
+  new Group('Group 3', [
+    { position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O' },
+    { position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F' },
+    { position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne' },
   ]),
 ];

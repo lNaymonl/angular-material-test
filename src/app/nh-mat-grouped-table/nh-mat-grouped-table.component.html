@@ -26,7 +26,11 @@
 <table
   mat-table
   matSort
+  [matSortDisabled]="!dragEnabled ||dragging"
+  cdkDropList
   cdkDropListOrientation="horizontal"
+  (cdkDropListDropped)="onDragged($event)"
+  [cdkDropListDisabled]="!dragEnabled"
   #table
   [dataSource]="dataSource"
   class="w-100 nh-mat-grouped-table"
@@ -54,8 +58,9 @@
   >
     <th
       mat-header-cell
-      *matHeaderCellDef
       mat-sort-header
+      *matHeaderCellDef
+      cdkDrag
       (cdkDragStarted)="dragging = true"
       (cdkDragEnded)="dragging = false"
       [disabled]="dragging"
@@ -66,6 +71,17 @@
       (resizedColumnSize)="onResizedColumnSize(colIndex, $event)"
       (resizeClicked)="onResizeClicked($event)"
     >
+    <!-- <th
+      mat-header-cell
+      *matHeaderCellDef
+      mat-sort-header
+      (cdkDragStarted)="dragging = true"
+      (cdkDragEnded)="dragging = false"
+      [disabled]="dragging"
+      class="border ps-3 mat-header-cell"
+      [resizeColumn]="true"
+      [index]="colIndex"
+    > -->
       <span>{{ column.header }}</span>
     </th>
     <!-- TODO fix sorting (and probably filtering) with the newly added rowspan feature -->
@@ -103,7 +119,7 @@
     </td>
   </ng-container>
 
-  <tr mat-header-row *matHeaderRowDef="displayedColumnOrder"></tr>
+  <tr mat-header-row *matHeaderRowDef="displayedColumnOrder" class="mat-header-row"></tr>
   <tr
     mat-row
     *matRowDef="let row; columns: displayedColumnOrder"

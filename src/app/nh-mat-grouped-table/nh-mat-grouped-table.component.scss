@@ -18,55 +18,97 @@ tr.group-item-row:hover {
   background-color: lightgray;
 }
 
+// .mat-table, .nh-mat-grouped-table {
+//   $resizer-width: 15px;
+
+//   width: 100%;
+// //   overflow-x: scroll;
+// //   display: table;
+// //   border-collapse: collapse;
+// //   margin: 0;
+
+//   &.resizing {
+//     -moz-user-select: none;
+//     -ms-user-select: none;
+//     user-select: none;
+//     cursor: col-resize;
+//   }
+
+//   .mat-header-cell {
+//     position: relative;
+    
+//     &:not(:last-child) {
+//       .resize-holder {
+//         cursor: col-resize;
+//         width: $resizer-width;
+//         height: 100%;
+//         position: absolute;
+//         right: calc(-1 * $resizer-width / 2);
+//         top: 0;
+//         z-index: 1;
+//       }
+//     }
+//   }
+
+//   .mat-cell {
+//     span {
+//       display: block;
+//       overflow: hidden;
+//       text-overflow: ellipsis;
+//     }
+//   }
+
+//   .mat-cell,
+//   .mat-header-cell {
+//     border-right: 1px solid rgba(0, 0, 0, 0.12);
+
+//     &:not(:nth-child(1)) {
+//       padding-inline: calc($resizer-width / 2);
+//     }
+//     &:is(:first-child) {
+//       padding-right: calc($resizer-width / 2);
+//     }
+//   }
+// }
+
 .mat-table, .nh-mat-grouped-table {
-  $resizer-width: 15px;
-
   width: 100%;
-//   overflow-x: scroll;
-//   display: table;
-//   border-collapse: collapse;
-//   margin: 0;
-
   &.resizing {
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
     cursor: col-resize;
   }
-
-  .mat-header-cell {
-    position: relative;
-    
-    &:not(:last-child) {
-      .resize-holder {
-        cursor: col-resize;
-        width: $resizer-width;
-        height: 100%;
-        position: absolute;
-        right: calc(-1 * $resizer-width / 2);
-        top: 0;
-        z-index: 1;
-      }
-    }
-  }
-
   .mat-cell {
-    span {
-      display: block;
+    span {       
+      display: block; 
       overflow: hidden;
       text-overflow: ellipsis;
     }
   }
-
+  .mat-header-cell {
+    position: relative;      
+    &:not(:last-child) {
+      .resize-holder {
+        cursor: col-resize;
+        width: 20px;
+        height: 100%;
+        position: absolute;
+        right: -10px;
+        top: 0;
+        z-index: 1;
+        background-color: #d3d3d3;
+      }
+    }
+    &:not(:first-child) {
+      margin-left: 7.5px;
+    }
+  }
   .mat-cell,
   .mat-header-cell {
     border-right: 1px solid rgba(0, 0, 0, 0.12);
-
     &:not(:nth-child(1)) {
-      padding-inline: calc($resizer-width / 2);
-    }
-    &:is(:first-child) {
-      padding-right: calc($resizer-width / 2);
+      padding: 0 10px;
     }
   }
 }

@@ -24,6 +24,7 @@ import { RxjsTestComponent } from './rxjs-test/rxjs-test.component';
 import { RowSpanTableComponent } from './row-span-table/row-span-table.component';
 import { ResizeableTableComponent } from './resizeable-table/resizeable-table.component';
 import { ResizeColumnDirective } from './resize-column.directive';
+import { ResizeColumnCopyPipe } from './resize-column-copy.pipe';
 
 const components = [
   HomeComponent,
@@ -52,7 +53,8 @@ const materialModules = [
   declarations: [
     AppComponent,
     ...components,
-    ResizeColumnDirective
+    ResizeColumnDirective,
+    ResizeColumnCopyPipe
   ],
   imports: [
     BrowserModule,

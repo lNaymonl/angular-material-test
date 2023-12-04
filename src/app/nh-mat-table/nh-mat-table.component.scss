@@ -45,8 +45,6 @@ table.nh-mat-table.cdk-drop-list-dragging
 .mat-table,
 .nh-mat-table,
 .nh-mat-grouped-table {
-  $resizer-width: 15px;
-
   width: 100%;
 
   &.resizing {
@@ -59,12 +57,5 @@ table.nh-mat-table.cdk-drop-list-dragging
   .mat-header-cell {
     cursor: pointer;
     position: relative;
-
-    &:not(:nth-child(1)) {
-      padding-inline: calc($resizer-width / 2);
-    }
-    &:is(:first-child) {
-      padding-right: calc($resizer-width / 2);
-    }
   }
 }
