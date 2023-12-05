@@ -42,6 +42,8 @@ export class ResizeColumnDirective implements OnInit {
   // TODO when 2..n column gets to small, it resizes the column before
   // TODO column element overlaps the resizer element
 
+  // BUG all column are resizing when too many are in a table and one of them is clicked
+
   ngOnInit() {
     this.row = this.renderer.parentNode(this.column);
     const thead = this.renderer.parentNode(this.row);

@@ -89,6 +89,20 @@ export class NhMatTableComponent {
   ngAfterViewInit() {
     this.dataSource.sortData = this.sortFunc;
     this.dataSource.sort = this.sort;
+
+    // TODO make this customizable
+
+    // Label für die Einträge pro Seite
+    this.paginator._intl.itemsPerPageLabel = "Einträge pro Seite";
+    
+    // Vor und zurück buttons
+    this.paginator._intl.previousPageLabel = "Zurück zur letzten Seite";
+    this.paginator._intl.nextPageLabel = "Zur nächste Seite";
+    
+    // Ganz nach vorne und ganz nach hinten buttons
+    this.paginator._intl.firstPageLabel = "Zur ersten Seite";
+    this.paginator._intl.lastPageLabel = "Zur letzten Seite";
+
     this.dataSource.paginator = this.paginator;
   }
 
@@ -133,13 +147,17 @@ export class NhMatTableComponent {
   }
 
   dragging: boolean = false;
+  @Output() columnOrderChange: EventEmitter<Column<any>[]> = new EventEmitter();
 
   onDragged(event: CdkDragDrop<string[]>) {
     moveItemInArray(this.displayedColumnOrder, event.previousIndex, event.currentIndex);
+    moveItemInArray(this.columnOrder, event.previousIndex, event.currentIndex);
+    this.columnOrderChange.emit(this.columnOrder);
   }
 
   onResizedColumnSize(index: number, event: number) {
     this.columnOrder[index].width = event;
+    this.columnOrderChange.emit(this.columnOrder);
   }
   
   onResizeClicked(event: boolean) {

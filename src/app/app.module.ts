@@ -26,6 +26,8 @@ import { ResizeableTableComponent } from './resizeable-table/resizeable-table.co
 import { ResizeColumnDirective } from './resize-column.directive';
 import { ResizeColumnCopyPipe } from './resize-column-copy.pipe';
 
+import { oBenutzer } from './benutzer.environment';
+
 const components = [
   HomeComponent,
   NhMatTableComponent,
@@ -63,7 +65,7 @@ const materialModules = [
     FormsModule,
     ...materialModules
   ],
-  providers: [],
+  providers: [oBenutzer],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

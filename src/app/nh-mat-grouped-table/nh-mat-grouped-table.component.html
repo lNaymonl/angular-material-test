@@ -21,7 +21,6 @@
   </mat-form-field>
 </div>
 
-<!-- TODO make columns resizable -->
 <!-- TODO add comments -->
 <table
   mat-table
@@ -35,6 +34,7 @@
   [dataSource]="dataSource"
   class="w-100 nh-mat-grouped-table"
 >
+  <!-- TODO is this really needed? -->
   <!-- TODO make the empty column work -->
   <!-- Adds an empty column so the group rows are better visible -->
   <!-- <ng-container matColumnDef="_emptyCol">
@@ -71,17 +71,6 @@
       (resizedColumnSize)="onResizedColumnSize(colIndex, $event)"
       (resizeClicked)="onResizeClicked($event)"
     >
-    <!-- <th
-      mat-header-cell
-      *matHeaderCellDef
-      mat-sort-header
-      (cdkDragStarted)="dragging = true"
-      (cdkDragEnded)="dragging = false"
-      [disabled]="dragging"
-      class="border ps-3 mat-header-cell"
-      [resizeColumn]="true"
-      [index]="colIndex"
-    > -->
       <span>{{ column.header }}</span>
     </th>
     <!-- TODO fix sorting (and probably filtering) with the newly added rowspan feature -->

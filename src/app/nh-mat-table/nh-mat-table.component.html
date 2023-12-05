@@ -45,7 +45,7 @@
     [matColumnDef]="column.columnDef"
     class="mat-table-col"
   >
-    <!-- <th
+    <th
       mat-header-cell
       mat-sort-header
       *matHeaderCellDef
@@ -59,18 +59,6 @@
       [initialColumnWidth]="column.width ?? null"
       (resizedColumnSize)="onResizedColumnSize(i, $event)"
       (resizeClicked)="onResizeClicked($event)"
-    > -->
-    <th
-      mat-header-cell
-      mat-sort-header
-      *matHeaderCellDef
-      cdkDrag
-      (cdkDragStarted)="dragging = true"
-      (cdkDragEnded)="dragging = false"
-      [disabled]="dragging"
-      class="border mat-header-cell"
-      [resizeColumn]="true"
-      [index]="i"
     >
       <span>{{ column.header }}</span>
     </th>
@@ -115,7 +103,8 @@
     *ngIf="!pager?.position || pager?.position == 'bottom'"
     [pageSizeOptions]="pager?.pageSizeOptions ?? [5, 10, 25, 100]"
     [pageSize]="pager?.defaultPageSize ?? 10"
-    aria-label="Select page"
+    aria-label="Seite auswählen"
     [hidePageSize]="pager?.hidePageSize"
+    [showFirstLastButtons]="true"
   ></mat-paginator>
 </div>

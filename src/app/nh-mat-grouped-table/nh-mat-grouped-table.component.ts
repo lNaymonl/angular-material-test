@@ -25,7 +25,7 @@ export class NhMatGroupedTable {
     this._columnOrder = value;
 
     this._columnOrder$.next(value);
-    this.columnOrderChange.emit(value);
+    // this.columnOrderChange.emit(value);
   }
   get columnOrder(): Column<any>[] {
     return this._columnOrder;
@@ -356,6 +356,8 @@ export class NhMatGroupedTable {
 
   onDragged(event: CdkDragDrop<string[]>) {
     moveItemInArray(this.displayedColumnOrder, event.previousIndex, event.currentIndex);
+    moveItemInArray(this.columnOrder, event.previousIndex, event.currentIndex);
+    this.columnOrderChange.emit(this.columnOrder);
   }
 
   setVisibilityIfEmpty(str: ColumnData | null | undefined): string {
@@ -389,6 +391,7 @@ export class NhMatGroupedTable {
 
   onResizedColumnSize(index: number, event: number) {
     this.columnOrder[index].width = event;
+    this.columnOrderChange.emit(this.columnOrder);
   }
   
   onResizeClicked(event: boolean) {
